@@ -1,16 +1,16 @@
-from itertools import combinations, permutations
+from itertools import combinations, permutations, product
 import random
 
 MAX_TURNS = 12
 SIZE = 4
 COLOURS = [
-    "red", "blue", "green", "yellow", "orange", "purple", "pink", "brown"
+    "red", "blue", "green", "yellow", "orange", "purple"
 ]
 
 
 def generate_colour_permutations(colours, n):
     """Generate all unique pairs of colour combinations."""
-    return list(permutations(colours, n))
+    return list(product(colours, repeat=n))
 
 
 def score_choice_to_code(choice, code):
@@ -26,7 +26,6 @@ def score_choice_to_code(choice, code):
 if __name__ == "__main__":
     colour_permutations = generate_colour_permutations(COLOURS, SIZE)
     code = random.choice(colour_permutations)
-
 
     possible_choices = colour_permutations.copy()
     turn = 0
