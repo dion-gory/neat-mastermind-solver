@@ -1,5 +1,7 @@
 from itertools import combinations, permutations, product
 import random
+import numpy as np
+
 
 MAX_TURNS = 12
 SIZE = 4
@@ -23,6 +25,25 @@ def score_choice_to_code(choice, code):
     return correct_position, correct_colour
 
 
+def information_gain(possible_choices):
+    """Calculate the information gain for each possible choice."""
+    info_gain = {}
+    for choice in possible_choices:
+        score_distribution = {}
+        for code in possible_choices:
+            score = score_choice_to_code(choice, code)
+            if score not in score_distribution:
+                score_distribution[score] = 0
+            score_distribution[score] += 1
+        total_possibilities = len(possible_choices)
+        entropy = 0
+        for count in score_distribution.values():
+            probability = count / total_possibilities
+            entropy -= (probability * np.log2(probability))
+        info_gain[choice] = entropy
+    return info_gain
+
+
 if __name__ == "__main__":
     colour_permutations = generate_colour_permutations(COLOURS, SIZE)
     code = random.choice(colour_permutations)
@@ -31,8 +52,11 @@ if __name__ == "__main__":
     turn = 0
     while True:
         turn += 1
-        choice = random.choice(possible_choices)
+        info_gain = information_gain(possible_choices)
+        choice = max(info_gain, key=info_gain.get)
+        choice_entropy = info_gain[choice]
         score = score_choice_to_code(choice, code)
+        print(f"Turn {turn}: Choice: {choice}, Entropy: {choice_entropy:.4f}, Score: {score}")
         if score[0] == SIZE:
             print(f"Solved the code {code} in {turn} turns!")
             break
