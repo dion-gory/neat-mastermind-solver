@@ -4,14 +4,13 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm  # pip install tqdm for progress bar
 
-from numpy_optimised import all_permutations, NUM_PERMUTATIONS, MAX_TURNS, play_game_wrapper
+from numpy_optimised import NUM_PERMUTATIONS, MAX_TURNS, play_game_wrapper, generate_random_codes, SIZE, NUM_COLOURS
 
 
 if __name__ == "__main__":
-    n_games = 100
-    test_codes = all_permutations[
-        np.random.choice(NUM_PERMUTATIONS, n_games, replace=True)
-    ]
+    n_games = 1
+    # Generate random test codes instead of sampling from all_permutations
+    test_codes = generate_random_codes(n_games)
 
     strategies = ["info_gain", "random_possible", "info_gain_all", "info_gain_hybrid"]
 
